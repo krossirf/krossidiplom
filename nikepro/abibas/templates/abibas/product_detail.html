@@ -1,0 +1,94 @@
+{% extends 'abibas/base.html' %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+{% comment %}
+Шаблон детальной информации о товаре. Показывает описание, характеристики и кнопку добавления в корзину.
+{% endcomment %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            {% if product.image %}
+            <img src="{{ product.image.url }}" class="img-fluid rounded" alt="{{ product.name }}">
+            {% endif %}
+        </div>
+        <div class="col-md-6">
+            <h2 class="mb-3">{{ product.name }}</h2>
+            <p class="brand mb-2">{{ product.brand.name }}</p>
+            <p class="price mb-4">{{ product.price }} ₽</p>
+            
+            <div class="mb-4">
+                <h5>Выберите размер:</h5>
+                <div class="size-selector">
+                    {% for size_value, size_label in product.SIZES %}
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="size" id="size_{{ size_value }}" value="{{ size_value }}" {% if product.size == size_value %}checked{% endif %}>
+                        <label class="form-check-label" for="size_{{ size_value }}">{{ size_label }}</label>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <p class="mb-4">{{ product.description }}</p>
+            
+            {% if product.stock > 0 %}
+            <p class="text-success mb-4">В наличии: {{ product.stock }} шт.</p>
+            <form method="post" action="{% url 'abibas:add_to_cart' product.id %}">
+                {% csrf_token %}
+                <input type="hidden" name="size" id="selected_size" value="{{ product.size }}">
+                <button type="submit" class="btn btn-add-to-cart btn-lg">
+                    <i class="bi bi-cart-plus"></i> Добавить в корзину
+                </button>
+            </form>
+            {% else %}
+            <p class="text-danger mb-4">Нет в наличии</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+.size-selector {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.form-check-inline {
+    margin-right: 15px;
+}
+
+.form-check-input {
+    cursor: pointer;
+}
+
+.form-check-label {
+    cursor: pointer;
+    padding: 5px 10px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.form-check-input:checked + .form-check-label {
+    background-color: var(--secondary-color);
+    color: white;
+    border-color: var(--secondary-color);
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sizeInputs = document.querySelectorAll('input[name="size"]');
+    const selectedSizeInput = document.getElementById('selected_size');
+    
+    sizeInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            selectedSizeInput.value = this.value;
+        });
+    });
+});
+</script>
+{% endblock %} 

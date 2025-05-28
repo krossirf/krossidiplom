@@ -1,0 +1,50 @@
+{% extends 'abibas/base.html' %}
+
+{% block title %}Мои заказы{% endblock %}
+
+{% comment %}
+Шаблон списка заказов пользователя. Отображает историю заказов и их статусы.
+{% endcomment %}
+
+{% block content %}
+<h1 class="mb-4">Мои заказы</h1>
+
+{% if orders %}
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>№ заказа</th>
+                    <th>Дата</th>
+                    <th>Статус</th>
+                    <th>Сумма</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                    <tr>
+                        <td>#{{ order.id }}</td>
+                        <td>{{ order.created_at|date:"d.m.Y H:i" }}</td>
+                        <td>
+                            <span class="badge {% if order.status == 'delivered' %}bg-success{% elif order.status == 'cancelled' %}bg-danger{% else %}bg-primary{% endif %}">
+                                {{ order.get_status_display }}
+                            </span>
+                        </td>
+                        <td>{{ order.total_amount }} ₽</td>
+                        <td>
+                            <a href="{% url 'abibas:order_detail' order.pk %}" class="btn btn-sm btn-outline-primary">Подробнее</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <div class="text-center py-5">
+        <h3>У вас пока нет заказов</h3>
+        <p class="text-muted">Перейдите в каталог, чтобы сделать покупку</p>
+        <a href="{% url 'abibas:product_list' %}" class="btn btn-primary mt-3">Перейти в каталог</a>
+    </div>
+{% endif %}
+{% endblock %} 

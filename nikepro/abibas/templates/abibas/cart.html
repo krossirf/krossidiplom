@@ -1,0 +1,68 @@
+{% extends 'abibas/base.html' %}
+
+{% block title %}Корзина{% endblock %}
+
+{% block content %}
+{% comment %}
+Шаблон корзины пользователя. Отображает товары, их количество, сумму и кнопки для оформления заказа или удаления товаров.
+{% endcomment %}
+<h2 class="sport-title text-center mb-4">Корзина</h2>
+{% if items %}
+    <div class="table-responsive">
+        <table class="table align-middle bg-white rounded shadow-sm">
+            <thead class="table-light">
+                <tr>
+                    <th>Товар</th>
+                    <th>Цена</th>
+                    <th>Количество</th>
+                    <th>Сумма</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                {% if item.product.image %}
+                                    <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 10px;" class="me-3">
+                                {% endif %}
+                                <div>
+                                    <h6 class="mb-0">{{ item.product.name }}</h6>
+                                    <small class="text-muted">{{ item.product.brand.name }}</small>
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ item.product.price }} ₽</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.subtotal }} ₽</td>
+                        <td>
+                            <form method="post" action="{% url 'abibas:remove_from_cart' item.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm rounded-pill px-3">Удалить</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" class="text-end"><strong>Итого:</strong></td>
+                    <td><strong>{{ total }} ₽</strong></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    <div class="d-flex justify-content-between mt-4">
+        <a href="{% url 'abibas:product_list' %}" class="btn btn-secondary rounded-pill px-4">Продолжить покупки</a>
+        <a href="{% url 'abibas:checkout' %}" class="btn btn-primary rounded-pill px-4">Оформить заказ</a>
+    </div>
+{% else %}
+    <div class="text-center py-5">
+        <h3>Ваша корзина пуста</h3>
+        <p class="text-muted">Добавьте товары в корзину, чтобы оформить заказ</p>
+        <a href="{% url 'abibas:product_list' %}" class="btn btn-primary mt-3 rounded-pill px-4">Перейти в каталог</a>
+    </div>
+{% endif %}
+{% endblock %} 

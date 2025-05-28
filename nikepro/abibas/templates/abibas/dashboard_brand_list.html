@@ -1,0 +1,35 @@
+{% extends 'abibas/dashboard.html' %}
+
+{% comment %}
+Шаблон списка брендов для админ-панели. Отображает все бренды и действия с ними.
+{% endcomment %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3>Бренды</h3>
+    <a href="{% url 'abibas:dashboard_brand_create' %}" class="btn btn-success mb-3">Создать бренд</a>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Название</th>
+                <th>Описание</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for brand in brands %}
+            <tr>
+                <td>{{ brand.id }}</td>
+                <td>{{ brand.name }}</td>
+                <td>{{ brand.description }}</td>
+                <td>
+                    <a href="{% url 'abibas:dashboard_brand_edit' brand.id %}" class="btn btn-primary btn-sm">Редактировать</a>
+                    <a href="{% url 'abibas:dashboard_brand_delete' brand.id %}" class="btn btn-danger btn-sm">Удалить</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %} 

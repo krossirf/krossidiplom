@@ -1,0 +1,17 @@
+{% extends 'abibas/dashboard.html' %}
+
+{% comment %}
+Шаблон формы создания/редактирования пользователя в админ-панели.
+{% endcomment %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3>{{ title }}</h3>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Сохранить</button>
+        <a href="{% url 'abibas:dashboard_user_list' %}" class="btn btn-secondary">Назад</a>
+    </form>
+</div>
+{% endblock %} 

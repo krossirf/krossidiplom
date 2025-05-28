@@ -1,0 +1,41 @@
+{% extends 'abibas/base.html' %}
+{% comment %}
+Шаблон страницы входа пользователя. Содержит форму авторизации.
+{% endcomment %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card card-sport p-4 shadow-lg">
+                <div class="card-header bg-white border-0 pb-0">
+                    <h3 class="sport-title text-center mb-4">Вход в систему</h3>
+                </div>
+                <div class="card-body">
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        {% for field in form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                            {{ field.errors }}
+                            <div class="form-control-wrapper">
+                                {{ field }}
+                            </div>
+                            {% if field.help_text %}
+                            <div class="form-text">{{ field.help_text }}</div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">Войти</button>
+                        </div>
+                    </form>
+                    <div class="text-center mt-4">
+                        <p class="mb-0">Нет аккаунта? <a href="{% url 'abibas:register' %}" class="text-decoration-none">Зарегистрироваться</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
