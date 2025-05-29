@@ -1,0 +1,39 @@
+{% extends 'abibas/dashboard.html' %}
+
+
+
+{% block content %}
+<div class="container mt-4">
+    <h3>Пользователи</h3>
+    <a href="{% url 'abibas:dashboard_user_create' %}" class="btn btn-success mb-3">Создать пользователя</a>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Имя пользователя</th>
+                <th>Email</th>
+                <th>Имя</th>
+                <th>Фамилия</th>
+                <th>Роль</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>{{ user.username }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.first_name }}</td>
+                <td>{{ user.last_name }}</td>
+                <td>{{ user.get_role_display }}</td>
+                <td>
+                    <a href="{% url 'abibas:dashboard_user_edit' user.id %}" class="btn btn-primary btn-sm">Редактировать</a>
+                    <a href="{% url 'abibas:dashboard_user_delete' user.id %}" class="btn btn-danger btn-sm">Удалить</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %} 

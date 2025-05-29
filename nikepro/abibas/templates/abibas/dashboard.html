@@ -1,0 +1,30 @@
+
+{% extends 'abibas/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">Админ-панель</h2>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="list-group">
+                <a href="{% url 'abibas:dashboard_user_list' %}" class="list-group-item list-group-item-action">Пользователи</a>
+                <a href="{% url 'abibas:dashboard_product_list' %}" class="list-group-item list-group-item-action">Товары</a>
+                <a href="{% url 'abibas:dashboard_order_list' %}" class="list-group-item list-group-item-action">Заказы</a>
+                <a href="{% url 'abibas:dashboard_cart_list' %}" class="list-group-item list-group-item-action">Корзины</a>
+                <a href="{% url 'abibas:dashboard_brand_list' %}" class="list-group-item list-group-item-action">Бренды</a>
+                <a href="{% url 'abibas:dashboard_category_list' %}" class="list-group-item list-group-item-action">Категории</a>
+                <a href="{% url 'abibas:dashboard_userlog_list' %}" class="list-group-item list-group-item-action">Логи пользователей</a>
+                <a href="{% url 'abibas:backup_restore' %}" class="list-group-item list-group-item-action">Бэкап/Восстановление БД</a>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-body">
+                    <h4>Добро пожаловать в кастомную админ-панель!</h4>
+                    <p>Выберите раздел в меню слева для управления данными.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

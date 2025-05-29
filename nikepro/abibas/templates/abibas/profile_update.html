@@ -1,0 +1,91 @@
+{% extends 'abibas/base.html' %}
+
+{% block title %}Редактирование профиля{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h3 class="card-title mb-4 text-center">
+                        <i class="bi bi-person-gear text-danger"></i> Редактирование профиля
+                    </h3>
+                    
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {% for error in form.non_field_errors %}
+                                {{ error }}
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                        
+                        {% for field in form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">
+                                {{ field.label }}
+                                {% if field.field.required %}
+                                    <span class="text-danger">*</span>
+                                {% endif %}
+                            </label>
+                            
+                            {% if field.name == 'avatar' %}
+                                <div class="input-group">
+                                    {{ field }}
+                                    <label class="input-group-text bg-danger text-white" for="{{ field.id_for_label }}">
+                                        <i class="bi bi-upload"></i>
+                                    </label>
+                                </div>
+                                {% if user.avatar %}
+                                <div class="mt-2">
+                                    <img src="{{ user.avatar.url }}" alt="Current avatar" class="img-thumbnail" style="max-width: 100px;">
+                                </div>
+                                {% endif %}
+                            {% else %}
+                                {{ field }}
+                            {% endif %}
+                            
+                            {% if field.errors %}
+                                {% for error in field.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {{ error }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                            
+                            {% if field.help_text %}
+                                <div class="form-text">{{ field.help_text }}</div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                        
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="{% url 'abibas:profile' %}" class="btn btn-outline-danger">
+                                <i class="bi bi-arrow-left"></i> Назад
+                            </a>
+                            <button type="submit" class="btn btn-danger">
+                                <i class="bi bi-check-lg"></i> Сохранить изменения
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block extra_js %}
+<script>
+    // Обновление label при выборе файла
+    document.querySelector('input[type="file"]').addEventListener('change', function(e) {
+        var fileName = e.target.files[0].name;
+        var next = e.target.nextElementSibling;
+        next.innerHTML = `<i class="bi bi-upload"></i> ${fileName}`;
+    });
+</script>
+{% endblock %}
+
+{% endblock %} 

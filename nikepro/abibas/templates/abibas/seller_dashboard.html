@@ -1,0 +1,86 @@
+{% extends 'abibas/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="list-group">
+                <a href="{% url 'abibas:seller_dashboard' %}" class="list-group-item list-group-item-action active">
+                    <i class="bi bi-speedometer2"></i> Панель управления
+                </a>
+                <a href="{% url 'abibas:seller_product_list' %}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-box"></i> Товары
+                </a>
+                <a href="{% url 'abibas:seller_order_list' %}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-cart"></i> Заказы
+                </a>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <h2>Панель продавца</h2>
+            <div class="row mt-4">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Последние заказы</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Покупатель</th>
+                                            <th>Сумма</th>
+                                            <th>Статус</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for order in orders|slice:":5" %}
+                                        <tr>
+                                            <td>{{ order.id }}</td>
+                                            <td>{{ order.user.username }}</td>
+                                            <td>{{ order.total_amount }}</td>
+                                            <td>{{ order.get_status_display }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Товары на складе</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Название</th>
+                                            <th>Цена</th>
+                                            <th>Количество</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for product in products|slice:":5" %}
+                                        <tr>
+                                            <td>{{ product.name }}</td>
+                                            <td>{{ product.price }}</td>
+                                            <td>{{ product.stock }}</td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

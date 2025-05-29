@@ -1,0 +1,98 @@
+{% extends 'abibas/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="list-group">
+                <a href="{% url 'abibas:warehouse_dashboard' %}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-speedometer2"></i> Панель управления
+                </a>
+                <a href="{% url 'abibas:warehouse_product_list' %}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-box"></i> Товары на складе
+                </a>
+                <a href="{% url 'abibas:warehouse_order_list' %}" class="list-group-item list-group-item-action active">
+                    <i class="bi bi-cart"></i> Заказы в обработке
+                </a>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Обработка заказа #{{ order.id }}</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5>Информация о заказе</h5>
+                            <p><strong>Дата:</strong> {{ order.created_at|date:"d.m.Y H:i" }}</p>
+                            <p><strong>Статус:</strong> 
+                                <span class="badge {% if order.status == 'processing' %}bg-warning
+                                             {% elif order.status == 'shipped' %}bg-info
+                                             {% elif order.status == 'delivered' %}bg-success
+                                             {% else %}bg-secondary{% endif %}">
+                                    {{ order.get_status_display }}
+                                </span>
+                            </p>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Информация о покупателе</h5>
+                            <p><strong>Имя:</strong> {{ order.user.get_full_name|default:order.user.username }}</p>
+                            <p><strong>Email:</strong> {{ order.user.email }}</p>
+                        </div>
+                    </div>
+
+                    <h5>Товары в заказе</h5>
+                    <div class="table-responsive mb-4">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Товар</th>
+                                    <th>Количество</th>
+                                    <th>Наличие</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for item in order.orderitem_set.all %}
+                                <tr>
+                                    <td>{{ item.product.name }}</td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>
+                                        <span class="badge {% if item.product.stock < item.quantity %}bg-danger
+                                                     {% else %}bg-success{% endif %}">
+                                            {{ item.product.stock }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="d-flex justify-content-between">
+                        <a href="{% url 'abibas:warehouse_order_list' %}" class="btn btn-secondary">
+                            <i class="bi bi-arrow-left"></i> Назад к списку
+                        </a>
+                        <div class="btn-group">
+                            <form method="post" class="d-inline">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="complete">
+                                <button type="submit" class="btn btn-success me-2">
+                                    <i class="bi bi-check-lg"></i> Собран и готов к отправке
+                                </button>
+                            </form>
+                            <form method="post" class="d-inline">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="postpone">
+                                <button type="submit" class="btn btn-warning">
+                                    <i class="bi bi-clock"></i> Отложить
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

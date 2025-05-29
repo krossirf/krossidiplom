@@ -1,0 +1,24 @@
+{% comment %}
+Шаблон для бэкапа и восстановления базы данных. Позволяет скачать и загрузить файл бэкапа.
+{% endcomment %}
+{% extends 'abibas/dashboard.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h3>Бэкап и восстановление базы данных</h3>
+    {% if message %}
+        <div class="alert alert-success">{{ message }}</div>
+    {% endif %}
+    <div class="mb-4">
+        <a href="{% url 'abibas:download_backup' %}" class="btn btn-primary">Скачать бэкап</a>
+    </div>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="backup_file" class="form-label">Загрузить файл бэкапа (.sqlite3):</label>
+            <input type="file" name="backup_file" id="backup_file" class="form-control" required>
+        </div>
+        <button type="submit" class="btn btn-success">Восстановить из бэкапа</button>
+    </form>
+</div>
+{% endblock %} 

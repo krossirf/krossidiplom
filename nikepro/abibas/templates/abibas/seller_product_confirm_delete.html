@@ -1,0 +1,38 @@
+{% extends 'abibas/base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="list-group">
+                <a href="{% url 'abibas:seller_dashboard' %}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-speedometer2"></i> Панель управления
+                </a>
+                <a href="{% url 'abibas:seller_product_list' %}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-box"></i> Товары
+                </a>
+                <a href="{% url 'abibas:seller_order_list' %}" class="list-group-item list-group-item-action">
+                    <i class="bi bi-cart"></i> Заказы
+                </a>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Удаление товара</h2>
+                </div>
+                <div class="card-body">
+                    <p>Вы действительно хотите удалить товар "{{ product.name }}"?</p>
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="d-flex justify-content-between">
+                            <a href="{% url 'abibas:seller_product_list' %}" class="btn btn-secondary">Отмена</a>
+                            <button type="submit" class="btn btn-danger">Удалить</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 
