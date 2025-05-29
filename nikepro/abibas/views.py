@@ -49,7 +49,7 @@ def product_list(request):
     elif sort == 'name':
         products = products.order_by('name')
     
-    paginator = Paginator(products, 12) 
+    paginator = Paginator(products, 9)  # Changed from 12 to 9 items per page
     page = request.GET.get('page')
     products = paginator.get_page(page)
     
