@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.core.paginator import Paginator
 from django.contrib.auth import login, authenticate, logout
 from .models import Product, Brand, Category, Cart, CartItem, Order, OrderItem, UserLog
-from .forms import UserRegistrationForm, UserLoginForm, UserProfileForm
+from .forms import UserRegistrationForm, UserLoginForm, UserProfileForm, UserEditForm
 from django.http import HttpResponseForbidden, FileResponse, HttpResponseRedirect
 from abibas.models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
@@ -280,13 +280,13 @@ def user_edit(request, user_id):
     # редактировать пользователя (админ)
     user = User.objects.get(pk=user_id)
     if request.method == 'POST':
-        form = UserChangeForm(request.POST, instance=user)
+        form = UserEditForm(request.POST, instance=user)
         if form.is_valid():
             form.save()
             messages.success(request, 'Пользователь обновлен!')
             return redirect('abibas:dashboard_user_list')
     else:
-        form = UserChangeForm(instance=user)
+        form = UserEditForm(instance=user)
     return render(request, 'abibas/dashboard_user_form.html', {'form': form, 'title': 'Редактировать пользователя'})
 
 @user_passes_test(is_admin)
