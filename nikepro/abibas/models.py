@@ -65,6 +65,7 @@ class Product(models.Model):
     stock = models.IntegerField(default=0, validators=[MinValueValidator(0)])  # Количество на складе
     created_at = models.DateTimeField(auto_now_add=True)  # Дата создания
     updated_at = models.DateTimeField(auto_now=True)  # Дата обновления
+    color = models.CharField(max_length=50, blank=True, null=True)
     seller = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     
     # Добавляем поле для размеров
